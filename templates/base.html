@@ -43,8 +43,7 @@
                 <a href="{% url 'registrar' %}">registrar</a>
                 {% endif %}
       
-        {% block content %}
-        {% endblock %}
+       
         </div>
         </div>
         </nav>
@@ -52,10 +51,13 @@
             {% if messages %}
             <div>
                 {% for message in messages %}
+                {% endfor %}
 
             </div>
+            {% endif %}
+           
             {% block content %}
-            {% endblock %}
+            {% endblock %}   
     </main>
 
     <footer class="footer">
