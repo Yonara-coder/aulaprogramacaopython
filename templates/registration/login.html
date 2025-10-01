@@ -1,4 +1,5 @@
 
+<<<<<<< HEAD
     {% extends "base.html" %}
 
     {% block title %}login{% endblock %}
@@ -34,5 +35,233 @@
 
     </div>
     </div>
+=======
+{% extends "base.html" %}
+
+{% block title %}Login - TechHouse Eletrônicos{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <h1><i class="fas fa-sign-in-alt"></i> Login</h1>
+            <p>Preencha com seu usuário e senha para acessar sua conta</p>
+        </div>
+
+        <form method="post" action="{% url 'login' %}" class="login-form">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="id_username">
+                    <i class="fas fa-user"></i> Usuário
+                </label>
+                <input type="text" 
+                       name="username" 
+                       id="id_username" 
+                       class="form-input" 
+                       placeholder="Digite seu usuário"
+                       required>
+            </div>
+
+            <div class="form-group">
+                <label for="id_password">
+                    <i class="fas fa-lock"></i> Senha
+                </label>
+                <input type="password" 
+                       name="password" 
+                       id="id_password" 
+                       class="form-input" 
+                       placeholder="Digite sua senha"
+                       required>
+            </div>
+
+            {% if form.errors %}
+            <div class="error-message">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>Usuário ou senha incorretos. Tente novamente.</p>
+            </div>
+            {% endif %}
+
+            <button type="submit" class="btn btn-primary btn-large">
+                <i class="fas fa-sign-in-alt"></i>
+                Entrar
+            </button>
+
+            <div class="login-footer">
+                <p>Não tem uma conta? 
+                    <a href="{% url 'registrar' %}" class="register-link">
+                        Cadastre-se aqui
+                    </a>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+.login-container {
+    min-height: calc(100vh - 200px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0;
+}
+
+.login-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    padding: 3rem;
+    width: 100%;
+    max-width: 450px;
+    animation: slideIn 0.6s ease;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.login-header h1 {
+    color: #333;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.login-header p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    color: #333;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.form-input {
+    padding: 1rem 1.5rem;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #667eea;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.error-message {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 1rem;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border: 1px solid #f5c6cb;
+}
+
+.error-message i {
+    font-size: 1.2rem;
+}
+
+.btn-large {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 50px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+.login-footer {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #eee;
+}
+
+.login-footer p {
+    color: #666;
+    margin: 0;
+}
+
+.register-link {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.register-link:hover {
+    color: #764ba2;
+    text-decoration: underline;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .login-card {
+        padding: 2rem;
+        margin: 1rem;
+    }
+    
+    .login-header h1 {
+        font-size: 2rem;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+</style>
+>>>>>>> a73ac93 (codigo finalizado)
 {% endblock %}
 

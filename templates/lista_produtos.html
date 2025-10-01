@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 
+<<<<<<< HEAD
 {% block content %}
 <h1 class="text-center">Produtos</h1>
 
@@ -17,4 +18,131 @@
     </div>
 {% endif %}
 
+=======
+{% block title %}Produtos - TechHouse Eletrônicos{% endblock %}
+
+{% block content %}
+<div class="products-container">
+    <div class="products-header">
+        <h1><i class="fas fa-box"></i> Nossos Produtos</h1>
+        <p class="products-subtitle">Descubra nossa seleção de produtos incríveis</p>
+    </div>
+
+    {% if produtos %}
+        <div class="products-grid">
+            {% for produto in produtos %}
+            <div class="product-card">
+                {% include 'partials/_card_produto.html' %}
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="no-products">
+            <div class="no-products-icon">
+                <i class="fas fa-box-open"></i>
+            </div>
+            <h2>Nenhum produto encontrado</h2>
+            <p>Que tal verificar nossa seleção mais tarde?</p>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+.products-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.products-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.products-header h1 {
+    color: #333;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.products-subtitle {
+    color: #666;
+    font-size: 1.2rem;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.product-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    animation: fadeIn 0.6s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+}
+
+.no-products {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.no-products-icon {
+    font-size: 4rem;
+    color: #ddd;
+    margin-bottom: 2rem;
+}
+
+.no-products h2 {
+    color: #333;
+    margin-bottom: 1rem;
+    font-size: 2rem;
+}
+
+.no-products p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    .products-header h1 {
+        font-size: 2rem;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+</style>
+>>>>>>> a73ac93 (codigo finalizado)
 {% endblock %}

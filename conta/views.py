@@ -28,7 +28,11 @@ def excluir_conta(request):
         user = request.user
         logout(request)
         user.delete()
+<<<<<<< HEAD
         messages.sucess(request, 'Sua conta foi excluída com sucesso.')
+=======
+        messages.success(request, 'Sua conta foi excluída com sucesso.')
+>>>>>>> a73ac93 (codigo finalizado)
         return redirect('lista_produtos')
     
     return render(request, 'excluir_conta_confirm.html')

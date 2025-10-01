@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+<<<<<<< HEAD
 {% block title %}Detalhes do Produto: {{ produto.nome }}{% endblock %}
 
 {% block content %}
@@ -21,11 +22,161 @@
                 style="margin-bottom: 15px;">{{ produto.nome }}</h2>
                 <p style="font-size: 1.75em; font-weight: 600;"> 
                     R$ {{ produto.preco }}</p>
+=======
+{% block title %}{{ produto.nome }} - TechHouse Eletrônicos{% endblock %}
+
+{% block content %}
+<div class="product-detail-container">
+    <div class="breadcrumb">
+        <a href="{% url 'lista_produtos' %}">
+            <i class="fas fa-home"></i> Produtos
+        </a>
+        <i class="fas fa-chevron-right"></i>
+        <span>{{ produto.nome }}</span>
+    </div>
+
+    <div class="product-detail-content">
+        <div class="product-images">
+            <div class="main-image">
+                {% if produto.imagem %}
+                    <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}" class="product-main-img">
+                {% else %}
+                    <div class="no-image-large">
+                        <i class="fas fa-image"></i>
+                        <span>Sem Imagem</span>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="product-info">
+            <div class="product-header">
+                <h1 class="product-title">{{ produto.nome }}</h1>
+                <div class="product-rating">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <span class="rating-text">(4.8) - 127 avaliações</span>
+                </div>
+            </div>
+
+            <div class="product-price-section">
+                <div class="price-container">
+                    <span class="current-price">R$ {{ produto.preco|floatformat:2 }}</span>
+                    <span class="price-installments">ou 12x de R$ <span id="installment-price">{{ produto.preco|floatformat:2 }}</span> sem juros</span>
+                </div>
+            </div>
+
+            <div class="product-availability">
+                <div class="availability-info">
+                    {% if produto.disponivel and produto.quantidade > 0 %}
+                        <div class="availability-badge available">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Em estoque ({{ produto.quantidade }} unidades)</span>
+                        </div>
+                        <div class="shipping-info">
+                            <i class="fas fa-truck"></i>
+                            <span>Frete grátis para todo o Brasil</span>
+                        </div>
+                    {% else %}
+                        <div class="availability-badge unavailable">
+                            <i class="fas fa-times-circle"></i>
+                            <span>Produto indisponível</span>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="product-description">
+                <h3>Descrição do Produto</h3>
+                <p>Este é um produto de alta qualidade com excelente custo-benefício. 
+                Perfeito para suas necessidades, oferecendo durabilidade e performance superior.</p>
+            </div>
+
+            <div class="product-features">
+                <h3>Características</h3>
+                <ul>
+                    <li><i class="fas fa-check"></i> Qualidade premium</li>
+                    <li><i class="fas fa-check"></i> Garantia de 1 ano</li>
+                    <li><i class="fas fa-check"></i> Suporte técnico 24/7</li>
+                    <li><i class="fas fa-check"></i> Entrega rápida</li>
+                </ul>
+            </div>
+
+            <div class="product-actions">
+                {% if produto.disponivel and produto.quantidade > 0 %}
+                    <div class="quantity-selector">
+                        <label for="quantity">Quantidade:</label>
+                        <div class="quantity-controls">
+                            <button type="button" class="qty-btn minus" onclick="decreaseQuantity()">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <input type="number" id="quantity" value="1" min="1" max="{{ produto.quantidade }}" class="quantity-input">
+                            <button type="button" class="qty-btn plus" onclick="increaseQuantity()">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <form method="post" action="{% url 'adicionar_ao_carrinho' produto.id %}" style="display: none;" id="add-to-cart-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="quantidade" id="hidden-quantity" value="1">
+                        </form>
+                        <button type="button" class="btn btn-primary btn-large add-to-cart-btn" onclick="addToCart()">
+                            <i class="fas fa-shopping-cart"></i>
+                            Adicionar ao Carrinho
+                        </button>
+                        <button class="btn btn-secondary btn-large wishlist-btn">
+                            <i class="fas fa-heart"></i>
+                            Lista de Desejos
+                        </button>
+                    </div>
+                {% else %}
+                    <div class="unavailable-actions">
+                        <button class="btn btn-secondary btn-large disabled" disabled>
+                            <i class="fas fa-times"></i>
+                            Produto Indisponível
+                        </button>
+                        <button class="btn btn-outline btn-large notify-btn">
+                            <i class="fas fa-bell"></i>
+                            Notificar quando disponível
+                        </button>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="product-specifications">
+                <h3>Especificações Técnicas</h3>
+                <div class="specs-grid">
+                    <div class="spec-item">
+                        <span class="spec-label">Categoria:</span>
+                        <span class="spec-value">Eletrônicos</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Marca:</span>
+                        <span class="spec-value">TechHouse Eletrônicos</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Garantia:</span>
+                        <span class="spec-value">1 ano</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">Peso:</span>
+                        <span class="spec-value">500g</span>
+                    </div>
+                </div>
+>>>>>>> a73ac93 (codigo finalizado)
             </div>
         </div>
     </div>
 </div>
 
+<<<<<<< HEAD
 
 
 
@@ -44,4 +195,404 @@
 
 
 
+=======
+<style>
+.product-detail-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    color: #666;
+}
+
+.breadcrumb a {
+    color: #667eea;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.product-detail-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    padding: 3rem;
+    margin-bottom: 3rem;
+}
+
+.product-images {
+    position: sticky;
+    top: 100px;
+}
+
+.main-image {
+    width: 100%;
+    height: 400px;
+    border-radius: 15px;
+    overflow: hidden;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-main-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.no-image-large {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #ccc;
+    font-size: 4rem;
+}
+
+.no-image-large span {
+    font-size: 1.2rem;
+    margin-top: 1rem;
+}
+
+.product-header {
+    margin-bottom: 2rem;
+}
+
+.product-title {
+    color: #333;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.product-rating {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.stars {
+    color: #ffc107;
+    font-size: 1.2rem;
+}
+
+.rating-text {
+    color: #666;
+    font-size: 1rem;
+}
+
+.product-price-section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 15px;
+}
+
+.current-price {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #28a745;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.price-installments {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.product-availability {
+    margin-bottom: 2rem;
+}
+
+.availability-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.availability-badge.available {
+    background: #d4edda;
+    color: #155724;
+}
+
+.availability-badge.unavailable {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.shipping-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #28a745;
+    font-weight: 500;
+}
+
+.product-description,
+.product-features,
+.product-specifications {
+    margin-bottom: 2rem;
+}
+
+.product-description h3,
+.product-features h3,
+.product-specifications h3 {
+    color: #333;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.product-description p {
+    color: #666;
+    line-height: 1.6;
+    font-size: 1.1rem;
+}
+
+.product-features ul {
+    list-style: none;
+    padding: 0;
+}
+
+.product-features li {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    color: #333;
+}
+
+.product-features li i {
+    color: #28a745;
+    font-size: 1.1rem;
+}
+
+.quantity-selector {
+    margin-bottom: 2rem;
+}
+
+.quantity-selector label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    max-width: 150px;
+}
+
+.qty-btn {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #ddd;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+.qty-btn:hover {
+    border-color: #667eea;
+    color: #667eea;
+}
+
+.quantity-input {
+    width: 60px;
+    height: 40px;
+    text-align: center;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.btn-large {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 50px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    flex: 1;
+}
+
+.add-to-cart-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.add-to-cart-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+    color: white;
+    text-decoration: none;
+}
+
+.wishlist-btn {
+    background: white;
+    color: #667eea;
+    border: 2px solid #667eea;
+}
+
+.wishlist-btn:hover {
+    background: #667eea;
+    color: white;
+}
+
+.unavailable-actions {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.btn.disabled {
+    background: #6c757d;
+    color: white;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.btn-outline {
+    background: white;
+    color: #667eea;
+    border: 2px solid #667eea;
+}
+
+.btn-outline:hover {
+    background: #667eea;
+    color: white;
+}
+
+.specs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.spec-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.spec-label {
+    font-weight: 600;
+    color: #333;
+}
+
+.spec-value {
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .product-detail-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 2rem;
+    }
+    
+    .product-title {
+        font-size: 2rem;
+    }
+    
+    .current-price {
+        font-size: 2.5rem;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .btn-large {
+        width: 100%;
+    }
+    
+    .specs-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+<script>
+// Calcular parcelas quando a página carregar
+document.addEventListener('DOMContentLoaded', function() {
+    const priceElement = document.querySelector('.current-price');
+    const installmentElement = document.getElementById('installment-price');
+    
+    if (priceElement && installmentElement) {
+        const priceText = priceElement.textContent.replace('R$ ', '').replace(',', '.');
+        const price = parseFloat(priceText);
+        const installment = (price / 12).toFixed(2).replace('.', ',');
+        installmentElement.textContent = 'R$ ' + installment;
+    }
+});
+
+function increaseQuantity() {
+    const input = document.getElementById('quantity');
+    const max = parseInt(input.getAttribute('max'));
+    const current = parseInt(input.value);
+    if (current < max) {
+        input.value = current + 1;
+    }
+}
+
+function decreaseQuantity() {
+    const input = document.getElementById('quantity');
+    const current = parseInt(input.value);
+    if (current > 1) {
+        input.value = current - 1;
+    }
+}
+
+function addToCart() {
+    const quantity = document.getElementById('quantity').value;
+    document.getElementById('hidden-quantity').value = quantity;
+    document.getElementById('add-to-cart-form').submit();
+}
+</script>
+>>>>>>> a73ac93 (codigo finalizado)
 {% endblock %}
