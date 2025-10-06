@@ -3,16 +3,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.db.models import Q
 from .models import Produto
+from .forms import ProdutoForm
 import django_filters
 from .filters import ProdutoFilter
 from django.contrib.auth.decorators import login_required
-<<<<<<< HEAD
-# CORREÇÃO: Importando 'messages' de uma forma segura para evitar conflitos
-from django.contrib.messages import api as messages_api
-=======
 from django.contrib import messages
 from carrinho.carrinho import Carrinho
->>>>>>> a73ac93 (codigo finalizado)
 
 # ----- Class-Based View para lista -----
 class ListaProdutosView(ListView):
@@ -30,9 +26,6 @@ def lista_produtos_filtrada(request):
     f = ProdutoFilter(request.GET, queryset=Produto.objects.all())
     return render(request, 'lista_produtos_filtrada.html', {'filter': f})
 
-<<<<<<< HEAD
-
-=======
 @login_required
 def adicionar_ao_carrinho(request, produto_id):
     produto = get_object_or_404(Produto, id=produto_id)
@@ -42,27 +35,8 @@ def adicionar_ao_carrinho(request, produto_id):
         return redirect(request.META.get('HTTP_REFERER', 'lista_produtos'))
 
     carrinho = Carrinho(request)
-    
-    # Verificar se foi enviada uma quantidade específica
-    quantidade = 1
-    if request.method == 'POST' and 'quantidade' in request.POST:
-        try:
-            quantidade = int(request.POST['quantidade'])
-            if quantidade <= 0:
-                quantidade = 1
-        except (ValueError, TypeError):
-            quantidade = 1
-    
-    # Verificar se há estoque suficiente
-    if quantidade > produto.quantidade:
-        messages.error(request, f'Quantidade solicitada ({quantidade}) maior que o estoque disponível ({produto.quantidade})')
-        return redirect(request.META.get('HTTP_REFERER', 'lista_produtos'))
-    
-    # Adicionar a quantidade especificada ao carrinho
-    for _ in range(quantidade):
-        carrinho.adicionar(produto=produto)
-    
-    messages.success(request, f'"{produto.nome}" (x{quantidade}) foi adicionado com sucesso')
+    carrinho.adicionar(produto=produto)
+    messages.success(request, f'"{produto.nome}" foi adicionado com sucesso')
     return redirect('ver_carrinho')
 
 @login_required
@@ -111,4 +85,54 @@ def sobre(request):
 
 def contato(request):
     return render(request, 'contato.html')
->>>>>>> a73ac93 (codigo finalizado)
+
+@login_required
+def cadastrar_produto(request):
+    # Buscar todos os produtos para exibir na listagem
+    produtos = Produto.objects.all().order_by('-id')
+    
+    if request.method == 'POST':
+        form = ProdutoForm(request.POST, request.FILES)
+        if form.is_valid():
+            produto = form.save()
+            messages.success(request, f'Produto "{produto.nome}" cadastrado com sucesso!')
+            return redirect('cadastrar_produto')
+    else:
+        form = ProdutoForm()
+    
+    return render(request, 'cadastrar_produto.html', {
+        'form': form,
+        'produtos': produtos
+    })
+
+@login_required
+def meus_produtos(request):
+    produtos = Produto.objects.all().order_by('-id')
+    return render(request, 'meus_produtos.html', {'produtos': produtos})
+
+@login_required
+def editar_produto(request, produto_id):
+    produto = get_object_or_404(Produto, id=produto_id)
+    
+    if request.method == 'POST':
+        form = ProdutoForm(request.POST, request.FILES, instance=produto)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Produto "{produto.nome}" atualizado com sucesso!')
+            return redirect('meus_produtos')
+    else:
+        form = ProdutoForm(instance=produto)
+    
+    return render(request, 'editar_produto.html', {'form': form, 'produto': produto})
+
+@login_required
+def excluir_produto(request, produto_id):
+    produto = get_object_or_404(Produto, id=produto_id)
+    
+    if request.method == 'POST':
+        nome_produto = produto.nome
+        produto.delete()
+        messages.success(request, f'Produto "{nome_produto}" excluído com sucesso!')
+        return redirect('meus_produtos')
+    
+    return render(request, 'excluir_produto_confirm.html', {'produto': produto})

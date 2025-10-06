@@ -9,12 +9,11 @@ def registrar(request):
     if request.method == 'POST':
         form = RegistroForm(request.POST)
         if form.is_valid():
-            novo_usuario = form.save(commit=False)
-            novo_usuario.set_password(form.cleaned_data['password'])
-            novo_usuario.save()
-            return render(request, 'registro_concluido.html', {'novo_usuario': novo_usuario})
+            novo_usuario = form.save()
+            messages.success(request, f'Conta criada com sucesso! Bem-vindo, {novo_usuario.first_name or novo_usuario.username}!')
+            return redirect('login')
     else:
-        form = RegistroForm
+        form = RegistroForm()
 
     return render(request, 'registrar.html', {'form': form})
 
@@ -28,11 +27,7 @@ def excluir_conta(request):
         user = request.user
         logout(request)
         user.delete()
-<<<<<<< HEAD
-        messages.sucess(request, 'Sua conta foi excluída com sucesso.')
-=======
         messages.success(request, 'Sua conta foi excluída com sucesso.')
->>>>>>> a73ac93 (codigo finalizado)
         return redirect('lista_produtos')
     
     return render(request, 'excluir_conta_confirm.html')

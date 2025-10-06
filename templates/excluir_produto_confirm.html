@@ -1,0 +1,274 @@
+{% extends "base.html" %}
+
+{% block title %}Excluir Produto - {{ produto.nome }}{% endblock %}
+
+{% block content %}
+<div class="delete-container">
+    <div class="delete-card">
+        <div class="delete-header">
+            <div class="warning-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h1>Confirmar Exclusão</h1>
+            <p>Você tem certeza que deseja excluir este produto?</p>
+        </div>
+
+        <div class="product-preview">
+            <div class="product-image">
+                {% if produto.imagem %}
+                    <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}" class="preview-img">
+                {% else %}
+                    <div class="no-image-preview">
+                        <i class="fas fa-image"></i>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="product-info">
+                <h3>{{ produto.nome }}</h3>
+                <p class="product-price">R$ {{ produto.preco|floatformat:2 }}</p>
+                <p class="product-stock">{{ produto.quantidade }} unidades em estoque</p>
+                {% if produto.descricao %}
+                    <p class="product-description">{{ produto.descricao|truncatechars:100 }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="warning-message">
+            <i class="fas fa-info-circle"></i>
+            <p><strong>Atenção:</strong> Esta ação não pode ser desfeita. O produto será permanentemente removido do sistema.</p>
+        </div>
+
+        <div class="delete-actions">
+            <a href="{% url 'meus_produtos' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Cancelar
+            </a>
+            <form method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Excluir Produto
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+.delete-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 0 20px;
+}
+
+.delete-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.delete-header {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+    padding: 2rem;
+    text-align: center;
+}
+
+.warning-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.9;
+}
+
+.delete-header h1 {
+    margin: 0 0 0.5rem 0;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.delete-header p {
+    margin: 0;
+    opacity: 0.9;
+    font-size: 1.1rem;
+}
+
+.product-preview {
+    display: flex;
+    gap: 1.5rem;
+    padding: 2rem;
+    border-bottom: 1px solid #e9ecef;
+    background: #f8f9fa;
+}
+
+.product-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.preview-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.no-image-preview {
+    color: #6c757d;
+    font-size: 2rem;
+}
+
+.product-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.product-info h3 {
+    margin: 0 0 0.5rem 0;
+    color: #2c3e50;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.product-price {
+    color: #28a745;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+}
+
+.product-stock {
+    color: #6c757d;
+    margin: 0 0 0.5rem 0;
+    font-weight: 500;
+}
+
+.product-description {
+    color: #6c757d;
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.warning-message {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.5rem 2rem;
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    margin: 0 2rem;
+    border-radius: 12px;
+    margin-top: 1.5rem;
+}
+
+.warning-message i {
+    color: #856404;
+    font-size: 1.2rem;
+    margin-top: 0.2rem;
+}
+
+.warning-message p {
+    margin: 0;
+    color: #856404;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.delete-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.btn {
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.1rem;
+    min-width: 150px;
+}
+
+.btn-secondary {
+    background: white;
+    color: #6c757d;
+    border: 2px solid #dee2e6;
+}
+
+.btn-secondary:hover {
+    background: #f8f9fa;
+    color: #495057;
+    border-color: #adb5bd;
+    text-decoration: none;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+}
+
+.btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(220, 53, 69, 0.4);
+    color: white;
+    text-decoration: none;
+}
+
+@media (max-width: 768px) {
+    .delete-container {
+        margin: 1rem auto;
+        padding: 0 15px;
+    }
+    
+    .delete-header {
+        padding: 1.5rem;
+    }
+    
+    .delete-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .product-preview {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.5rem;
+    }
+    
+    .product-image {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto;
+    }
+    
+    .warning-message {
+        margin: 1rem;
+        padding: 1rem;
+    }
+    
+    .delete-actions {
+        flex-direction: column;
+        padding: 1.5rem;
+    }
+    
+    .btn {
+        width: 100%;
+    }
+}
+</style>
+{% endblock %}

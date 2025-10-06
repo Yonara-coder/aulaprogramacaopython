@@ -13,11 +13,7 @@ class Carrinho:
     def adicionar(self, produto, quantidade=1, update_quantidade=False):
         produto_id = str(produto.id)
         if produto_id not in self.carrinho:
-<<<<<<< HEAD
-            self.carrinho[produto.id] = {'quantidade': 0, 'preco': str(produto.preco)}
-=======
             self.carrinho[produto_id] = {'quantidade': 0, 'preco': str(produto.preco)}
->>>>>>> a73ac93 (codigo finalizado)
 
         if update_quantidade:
             self.carrinho[produto_id]['quantidade'] = quantidade
@@ -57,4 +53,3 @@ class Carrinho:
     def limpar(self):
         del self.session[settings.CART_SESSION_ID]
         self.session.modified = True
-

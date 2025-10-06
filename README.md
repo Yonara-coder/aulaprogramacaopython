@@ -1,171 +1,226 @@
-# 🏪 TechHouse Eletrônicos
+# 🛒 TechHouse Eletrônicos - E-commerce Django
 
-Uma loja online completa desenvolvida em Django para venda de produtos eletrônicos.
+Sistema completo de e-commerce desenvolvido em Django com funcionalidades modernas de carrinho de compras, autenticação de usuários e administração de produtos.
 
-## 🚀 Funcionalidades
+## ✨ Funcionalidades
 
-- ✅ **Sistema de Usuários**: Registro, login e logout
-- ✅ **Catálogo de Produtos**: Lista com imagens e detalhes
-- ✅ **Carrinho de Compras**: Adicionar, remover e atualizar quantidades
-- ✅ **Checkout**: Finalização de compra com validação de estoque
-- ✅ **Sistema de Filtros**: Pesquisa por nome, preço e disponibilidade
-- ✅ **Design Responsivo**: Funciona em desktop, tablet e mobile
-- ✅ **Interface Moderna**: Design elegante com animações
+### 🛍️ **E-commerce Completo**
+- ✅ Listagem de produtos com design responsivo
+- ✅ Página de detalhes do produto com galeria de imagens
+- ✅ Carrinho de compras funcional com sessões
+- ✅ Sistema de checkout com verificação de estoque
+- ✅ Cálculo automático de parcelas
+
+### 👤 **Sistema de Usuários**
+- ✅ Cadastro de usuários com validação
+- ✅ Login e logout seguros
+- ✅ Páginas de "Sobre" e "Contato"
+- ✅ Interface de usuário moderna
+
+### 🛠️ **Administração de Produtos**
+- ✅ Cadastro de produtos com upload de imagem
+- ✅ Edição completa de produtos existentes
+- ✅ Exclusão de produtos com confirmação
+- ✅ Listagem com busca e filtros
+- ✅ Interface de administração unificada
+
+### 🎨 **Design Moderno**
+- ✅ Interface responsiva (mobile-first)
+- ✅ Design heurístico profissional
+- ✅ Gradientes e animações suaves
+- ✅ Ícones Font Awesome
+- ✅ Paleta de cores harmoniosa
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **Backend**: Django 5.2.6
-- **Frontend**: HTML5, CSS3, JavaScript
-- **Banco de Dados**: SQLite
-- **Estilização**: CSS customizado com gradientes e animações
-- **Ícones**: Font Awesome
-- **Fontes**: Google Fonts (Poppins)
+- **Backend:** Django 5.2.6
+- **Frontend:** HTML5, CSS3, JavaScript
+- **Banco de Dados:** SQLite (desenvolvimento)
+- **Imagens:** Sistema de upload com Django
+- **Estilização:** CSS Grid, Flexbox, Gradientes
+- **Ícones:** Font Awesome 6
 
-## 📦 Instalação
+## 📦 Estrutura do Projeto
 
-### 1. Clone o repositório
-```bash
-git clone https://github.com/SEU_USUARIO/techhouse-eletronicos.git
-cd techhouse-eletronicos
+```
+aulaprogramacaopython-master/
+├── core/                    # Configurações do Django
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── loja/                    # App principal da loja
+│   ├── models.py           # Modelo de Produto
+│   ├── views.py            # Views do e-commerce
+│   ├── urls.py             # URLs da loja
+│   ├── forms.py            # Formulários
+│   └── management/         # Comandos personalizados
+├── carrinho/               # Sistema de carrinho
+│   ├── carrinho.py         # Lógica do carrinho
+│   └── context_processor.py
+├── conta/                  # Sistema de usuários
+│   ├── views.py
+│   └── forms.py
+├── templates/              # Templates HTML
+│   ├── base.html
+│   ├── lista_produtos.html
+│   ├── produto_detail.html
+│   ├── carrinho.html
+│   ├── cadastrar_produto.html
+│   └── partials/
+├── static/                 # Arquivos estáticos
+│   └── loja/
+│       └── style.css
+├── media/                  # Uploads de imagens
+└── manage.py
 ```
 
-### 2. Crie um ambiente virtual
+## 🚀 Como Executar
+
+### **1. Clonar o Repositório**
+```bash
+git clone https://github.com/Yonara-coder/aulaprogramacaopython.git
+cd aulaprogramacaopython
+```
+
+### **2. Criar Ambiente Virtual**
 ```bash
 python -m venv venv
-```
 
-### 3. Ative o ambiente virtual
-
-**Windows:**
-```bash
+# Windows
 venv\Scripts\activate
-```
 
-**Linux/Mac:**
-```bash
+# Linux/Mac
 source venv/bin/activate
 ```
 
-### 4. Instale as dependências
+### **3. Instalar Dependências**
 ```bash
-pip install -r requirements.txt
+pip install django pillow django-filter
 ```
 
-### 5. Execute as migrações
+### **4. Configurar Banco de Dados**
 ```bash
-python manage.py migrate
-```
-
-### 6. Crie um superusuário (opcional)
-```bash
-python manage.py createsuperuser
-```
-
-### 7. Execute o servidor
-```bash
-python manage.py runserver
-```
-
-### 8. Acesse a aplicação
-Abra seu navegador em: `http://127.0.0.1:8000/`
-
-## 📱 Como Usar
-
-### Para Usuários
-1. **Registre-se** ou faça **login**
-2. **Navegue** pelos produtos
-3. **Adicione** itens ao carrinho
-4. **Finalize** sua compra
-
-### Para Administradores
-1. Acesse `/admin/`
-2. Use as credenciais do superusuário
-3. Gerencie produtos, usuários e pedidos
-
-## 🎨 Páginas Disponíveis
-
-- **Home** (`/`) - Lista de produtos
-- **Produtos** (`/`) - Catálogo completo
-- **Detalhes** (`/produto/<id>/`) - Informações do produto
-- **Pesquisar** (`/filtrados/`) - Filtros e busca
-- **Carrinho** (`/carrinho/`) - Itens selecionados
-- **Checkout** (`/carrinho/checkout/`) - Finalizar compra
-- **Login** (`/conta/login/`) - Acesso à conta
-- **Registro** (`/conta/registrar/`) - Criar conta
-- **Sobre** (`/sobre/`) - Informações da empresa
-- **Contato** (`/contato/`) - Dados de contato
-
-## 🏢 Sobre a TechHouse Eletrônicos
-
-**TechHouse Eletrônicos** é uma loja especializada em produtos eletrônicos de alta qualidade, localizada em Fraiburg - SC.
-
-### Informações de Contato
-- **Proprietária**: Yonara Adelita Ribeiro Ogliari
-- **Telefone**: (47) 99644-9933
-- **E-mail**: contato@techhouse.com.br
-- **Localização**: Fraiburg - SC
-
-## 📋 Estrutura do Projeto
-
-```
-techhouse-eletronicos/
-├── core/                   # Configurações do Django
-├── loja/                   # App principal da loja
-├── conta/                  # App de usuários
-├── carrinho/               # App do carrinho de compras
-├── templates/              # Templates HTML
-├── static/                 # Arquivos estáticos (CSS, JS)
-├── media/                  # Imagens e uploads
-└── manage.py              # Script de gerenciamento
-```
-
-## 🔧 Comandos Úteis
-
-```bash
-# Executar servidor
-python manage.py runserver
-
-# Criar migrações
 python manage.py makemigrations
-
-# Aplicar migrações
 python manage.py migrate
-
-# Criar superusuário
-python manage.py createsuperuser
-
-# Coletar arquivos estáticos
-python manage.py collectstatic
 ```
 
-## 📸 Screenshots
+### **5. Criar Superusuário**
+```bash
+python manage.py createsuperuser
+```
 
-### Página Inicial
-![Home](media/screenshots/home.png)
+### **6. Adicionar Produtos de Exemplo**
+```bash
+python manage.py add_produtos
+```
 
-### Detalhes do Produto
-![Produto](media/screenshots/produto.png)
+### **7. Executar Servidor**
+```bash
+python manage.py runserver
+```
 
-### Carrinho de Compras
-![Carrinho](media/screenshots/carrinho.png)
+### **8. Acessar o Sistema**
+- **Loja:** http://127.0.0.1:8000/
+- **Admin:** http://127.0.0.1:8000/admin/
+- **Cadastrar Produtos:** http://127.0.0.1:8000/cadastrar-produto/
 
-## 🤝 Contribuição
+## 📱 Páginas do Sistema
 
-1. Faça um fork do projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
+### **🛒 E-commerce**
+- **Página Inicial:** Lista de produtos com filtros
+- **Detalhes do Produto:** Informações completas e adicionar ao carrinho
+- **Carrinho:** Gerenciar itens e finalizar compra
+- **Checkout:** Processo de finalização da compra
 
-## 📄 Licença
+### **👤 Usuários**
+- **Login:** Autenticação de usuários
+- **Registro:** Cadastro de novos usuários
+- **Sobre:** Informações sobre a empresa
+- **Contato:** Formulário de contato
 
-Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
+### **🛠️ Administração**
+- **Cadastrar Produto:** Formulário + listagem completa
+- **Meus Produtos:** Gerenciar produtos cadastrados
+- **Editar Produto:** Modificar informações
+- **Excluir Produto:** Remover com confirmação
+
+## 🎨 Características do Design
+
+### **Design Heurístico**
+- ✅ Layout intuitivo e familiar
+- ✅ Navegação clara e consistente
+- ✅ Feedback visual para todas as ações
+- ✅ Hierarquia visual bem definida
+
+### **Responsividade**
+- ✅ Mobile-first design
+- ✅ Breakpoints para tablet e desktop
+- ✅ Grid system flexível
+- ✅ Componentes adaptáveis
+
+### **Interatividade**
+- ✅ Hover effects suaves
+- ✅ Transições animadas
+- ✅ Busca em tempo real
+- ✅ Filtros dinâmicos
+
+## 🔧 Funcionalidades Técnicas
+
+### **Sistema de Carrinho**
+- Sessões Django para persistência
+- Cálculo automático de totais
+- Verificação de estoque
+- Atualização de quantidades
+
+### **Upload de Imagens**
+- Suporte a múltiplos formatos
+- Redimensionamento automático
+- Placeholder para produtos sem imagem
+- Otimização para web
+
+### **Validação de Formulários**
+- Validação client-side e server-side
+- Mensagens de erro contextuais
+- Campos obrigatórios marcados
+- Sanitização de dados
+
+## 📊 Banco de Dados
+
+### **Modelo Produto**
+- `nome`: Nome do produto
+- `descricao`: Descrição detalhada
+- `preco`: Preço em decimal
+- `quantidade`: Estoque disponível
+- `disponivel`: Status de disponibilidade
+- `imagem`: Upload de imagem
+
+## 🚀 Deploy
+
+### **Configurações para Produção**
+1. Configurar `DEBUG = False`
+2. Configurar `ALLOWED_HOSTS`
+3. Configurar banco de dados PostgreSQL
+4. Configurar arquivos estáticos
+5. Configurar servidor web (Nginx + Gunicorn)
+
+## 📝 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ## 👨‍💻 Desenvolvedor
 
-Desenvolvido com ❤️ para a TechHouse Eletrônicos
+**Yonara-coder**
+- GitHub: [@Yonara-coder](https://github.com/Yonara-coder)
+- Projeto: Sistema de E-commerce Django
+
+## 🤝 Contribuições
+
+Contribuições são bem-vindas! Sinta-se à vontade para:
+- Reportar bugs
+- Sugerir melhorias
+- Enviar pull requests
+- Compartilhar o projeto
 
 ---
 
-**TechHouse Eletrônicos: conectando você ao futuro! ⚡**
-
+**⭐ Se este projeto te ajudou, considere dar uma estrela no repositório!**

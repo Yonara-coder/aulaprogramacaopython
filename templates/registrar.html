@@ -1,35 +1,6 @@
 {% extends "base.html" %}
-<<<<<<< HEAD
-{% block title %}Criar Consta{% endblock %}
 
-{% block content %}
-
-<div class="card" style="max-width: 500px; margin: auto;">
-    <div>
-        <form method="post">
-            {% csrf_token %}
-
-            {% for field in form %}
-            <div>
-                <label>{{ field.label_tag }}</label>
-                {{ field }}
-                {% if field.help_txt %}
-                <smalll>{{ field.hel_text }}</smalll>
-                {% endif %}
-                {% for error in field.errors %}
-                <p style="color: red;">{{ error }}</p>
-                {% endfor %}
-
-            </div>
-           {% endfor %}
-           <br>
-           <button type="submit" class="btn">Criar minha conta</button>
-        </form>
-    </div>
-</div>
-=======
-
-{% block title %}Criar Conta - Minha Loja{% endblock %}
+{% block title %}Criar Conta - TechHouse Eletrônicos{% endblock %}
 
 {% block content %}
 <div class="register-container">
@@ -103,12 +74,7 @@
                 <label for="id_password1">
                     <i class="fas fa-lock"></i> Senha
                 </label>
-                <input type="password" 
-                       name="password1" 
-                       id="id_password1" 
-                       class="form-input" 
-                       placeholder="Digite sua senha"
-                       required>
+                {{ form.password1 }}
                 {% if form.password1.errors %}
                     <div class="error-message">
                         {% for error in form.password1.errors %}
@@ -122,12 +88,7 @@
                 <label for="id_password2">
                     <i class="fas fa-lock"></i> Confirmar Senha
                 </label>
-                <input type="password" 
-                       name="password2" 
-                       id="id_password2" 
-                       class="form-input" 
-                       placeholder="Confirme sua senha"
-                       required>
+                {{ form.password2 }}
                 {% if form.password2.errors %}
                     <div class="error-message">
                         {% for error in form.password2.errors %}
@@ -311,5 +272,4 @@
     }
 }
 </style>
->>>>>>> a73ac93 (codigo finalizado)
 {% endblock %}

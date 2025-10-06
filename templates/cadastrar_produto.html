@@ -1,0 +1,811 @@
+{% extends "base.html" %}
+
+{% block title %}Administração de Produtos - TechHouse Eletrônicos{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <!-- Header da Administração -->
+    <div class="admin-header">
+        <div class="admin-title">
+            <h1><i class="fas fa-cogs"></i> Administração de Produtos</h1>
+            <p>Gerencie todos os produtos da loja</p>
+        </div>
+        <div class="admin-stats">
+            <div class="stat-card">
+                <i class="fas fa-boxes"></i>
+                <div class="stat-info">
+                    <span class="stat-number">{{ produtos|length }}</span>
+                    <span class="stat-label">Total de Produtos</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-check-circle"></i>
+                <div class="stat-info">
+                    <span class="stat-number">{{ produtos|length|add:"-1"|add:"1" }}</span>
+                    <span class="stat-label">Disponíveis</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-content">
+        <!-- Formulário de Cadastro -->
+        <div class="form-section">
+            <div class="form-header">
+                <h2><i class="fas fa-plus-circle"></i> Cadastrar Novo Produto</h2>
+                <p>Preencha os dados para adicionar um novo produto</p>
+            </div>
+
+            <form method="post" enctype="multipart/form-data" class="product-form">
+                {% csrf_token %}
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ form.nome.id_for_label }}">
+                            <i class="fas fa-tag"></i> Nome do Produto
+                        </label>
+                        {{ form.nome }}
+                        {% for error in form.nome.errors %}
+                            <div class="error-message">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.preco.id_for_label }}">
+                            <i class="fas fa-dollar-sign"></i> Preço
+                        </label>
+                        {{ form.preco }}
+                        {% for error in form.preco.errors %}
+                            <div class="error-message">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ form.quantidade.id_for_label }}">
+                            <i class="fas fa-boxes"></i> Quantidade
+                        </label>
+                        {{ form.quantidade }}
+                        {% for error in form.quantidade.errors %}
+                            <div class="error-message">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.imagem.id_for_label }}">
+                            <i class="fas fa-image"></i> Imagem do Produto
+                        </label>
+                        {{ form.imagem }}
+                        {% for error in form.imagem.errors %}
+                            <div class="error-message">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.descricao.id_for_label }}">
+                        <i class="fas fa-align-left"></i> Descrição
+                    </label>
+                    {{ form.descricao }}
+                    {% for error in form.descricao.errors %}
+                        <div class="error-message">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-large">
+                    <i class="fas fa-save"></i> Cadastrar Produto
+                </button>
+            </form>
+        </div>
+
+        <!-- Listagem de Produtos -->
+        <div class="products-section">
+            <div class="products-header">
+                <h2><i class="fas fa-list"></i> Produtos Cadastrados</h2>
+                <div class="products-controls">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Buscar produtos...">
+                    </div>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="all">Todos</button>
+                        <button class="filter-btn" data-filter="available">Disponíveis</button>
+                        <button class="filter-btn" data-filter="unavailable">Indisponíveis</button>
+                    </div>
+                </div>
+            </div>
+
+            {% if produtos %}
+                <div class="products-grid" id="productsGrid">
+                    {% for produto in produtos %}
+                    <div class="product-card admin-card" data-name="{{ produto.nome|lower }}" data-status="{% if produto.disponivel and produto.quantidade > 0 %}available{% else %}unavailable{% endif %}">
+                        <div class="product-image-container">
+                            {% if produto.imagem %}
+                                <img src="{{ produto.imagem.url }}" class="product-image" alt="{{ produto.nome }}">
+                            {% else %}
+                                <div class="placeholder-image">
+                                    <i class="fas fa-box"></i>
+                                    <span>{{ produto.nome|truncatechars:15 }}</span>
+                                </div>
+                            {% endif %}
+                            <div class="product-overlay">
+                                <a href="{% url 'produto_detail' produto.pk %}" class="view-details-btn">
+                                    <i class="fas fa-eye"></i>
+                                    Ver Detalhes
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="product-info">
+                            <h3 class="product-name">{{ produto.nome }}</h3>
+                            
+                            <div class="product-price">
+                                <span class="price">R$ {{ produto.preco|floatformat:2 }}</span>
+                            </div>
+                            
+                            <div class="product-status">
+                                <span class="status-badge {% if produto.disponivel and produto.quantidade > 0 %}available{% else %}unavailable{% endif %}">
+                                    <i class="fas fa-{% if produto.disponivel and produto.quantidade > 0 %}check-circle{% else %}times-circle{% endif %}"></i>
+                                    {% if produto.disponivel and produto.quantidade > 0 %}
+                                        Disponível ({{ produto.quantidade }} unidades)
+                                    {% else %}
+                                        Indisponível
+                                    {% endif %}
+                                </span>
+                            </div>
+                            
+                            <div class="product-description">
+                                {% if produto.descricao %}
+                                    <p>{{ produto.descricao|truncatechars:60 }}</p>
+                                {% else %}
+                                    <p class="no-description">Sem descrição</p>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="product-actions">
+                                <div class="action-buttons">
+                                    <a href="{% url 'produto_detail' produto.pk %}" class="btn btn-outline btn-sm">
+                                        <i class="fas fa-eye"></i>
+                                        Ver
+                                    </a>
+                                    <a href="{% url 'editar_produto' produto.id %}" class="btn btn-warning btn-sm">
+                                        <i class="fas fa-edit"></i>
+                                        Editar
+                                    </a>
+                                    <a href="{% url 'excluir_produto' produto.id %}" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash"></i>
+                                        Excluir
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="no-products">
+                    <div class="no-products-icon">
+                        <i class="fas fa-box-open"></i>
+                    </div>
+                    <h3>Nenhum produto cadastrado</h3>
+                    <p>Comece cadastrando seu primeiro produto usando o formulário acima</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+.admin-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.admin-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: 20px;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.admin-title h1 {
+    margin: 0 0 0.5rem 0;
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.admin-title p {
+    margin: 0;
+    opacity: 0.9;
+    font-size: 1.1rem;
+}
+
+.admin-stats {
+    display: flex;
+    gap: 1rem;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    backdrop-filter: blur(10px);
+}
+
+.stat-card i {
+    font-size: 2rem;
+    opacity: 0.8;
+}
+
+.stat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-number {
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.admin-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+}
+
+.form-section {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.form-header {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.form-header h2 {
+    margin: 0 0 0.5rem 0;
+    color: #2c3e50;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.form-header p {
+    margin: 0;
+    color: #6c757d;
+    font-size: 1rem;
+}
+
+.product-form {
+    padding: 2rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 0.9rem;
+}
+
+.form-group label i {
+    margin-right: 0.5rem;
+    color: #667eea;
+    width: 16px;
+}
+
+.form-input,
+.form-input-file {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+}
+
+.form-input:focus,
+.form-input-file:focus {
+    outline: none;
+    border-color: #667eea;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-input-file {
+    padding: 0.5rem;
+    background: white;
+    cursor: pointer;
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+}
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    color: white;
+    text-decoration: none;
+}
+
+.btn-large {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    width: 100%;
+}
+
+.products-section {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.products-header {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.products-header h2 {
+    margin: 0 0 1rem 0;
+    color: #2c3e50;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.products-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.search-box {
+    position: relative;
+    flex: 1;
+    max-width: 300px;
+}
+
+.search-box i {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 0.5rem 0.75rem 0.5rem 2.5rem;
+    border: 2px solid #e9ecef;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    background: white;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.filter-btn {
+    padding: 0.5rem 1rem;
+    border: 2px solid #e9ecef;
+    background: white;
+    color: #6c757d;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-btn.active,
+.filter-btn:hover {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 1.5rem;
+}
+
+.product-card {
+    border: 2px solid #e9ecef;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.product-card:hover {
+    border-color: #667eea;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.product-image-container {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+    background: #f8f9fa;
+}
+
+.product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.placeholder-image {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #6c757d;
+    font-size: 2rem;
+    text-align: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.placeholder-image span {
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    font-weight: 600;
+}
+
+.product-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.product-card:hover .product-overlay {
+    opacity: 1;
+}
+
+.view-details-btn {
+    background: white;
+    color: #333;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    font-size: 0.8rem;
+}
+
+.view-details-btn:hover {
+    background: #667eea;
+    color: white;
+    transform: translateY(-2px);
+    text-decoration: none;
+}
+
+.product-info {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.product-name {
+    color: #2c3e50;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.product-price {
+    margin: 0;
+}
+
+.price {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #28a745;
+}
+
+.product-status {
+    margin: 0;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.status-badge.available {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-badge.unavailable {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.product-description {
+    margin: 0;
+}
+
+.product-description p {
+    margin: 0;
+    color: #6c757d;
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.no-description {
+    font-style: italic;
+    color: #adb5bd !important;
+}
+
+.product-actions {
+    margin-top: auto;
+    padding-top: 0.75rem;
+    border-top: 1px solid #e9ecef;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    flex: 1;
+    min-width: 60px;
+}
+
+.btn-outline {
+    background: white;
+    color: #667eea;
+    border: 2px solid #667eea;
+}
+
+.btn-outline:hover {
+    background: #667eea;
+    color: white;
+    text-decoration: none;
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
+    color: #212529;
+    box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
+}
+
+.btn-warning:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 193, 7, 0.4);
+    color: #212529;
+    text-decoration: none;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+}
+
+.btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.4);
+    color: white;
+    text-decoration: none;
+}
+
+.no-products {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: #6c757d;
+}
+
+.no-products-icon {
+    font-size: 3rem;
+    color: #dee2e6;
+    margin-bottom: 1rem;
+}
+
+.no-products h3 {
+    margin: 0 0 0.5rem 0;
+    color: #495057;
+    font-size: 1.5rem;
+}
+
+.no-products p {
+    margin: 0;
+    font-size: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .admin-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-container {
+        padding: 0 15px;
+    }
+    
+    .admin-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .admin-stats {
+        justify-content: center;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .products-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .search-box {
+        max-width: none;
+    }
+    
+    .products-grid {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .btn-sm {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .btn-sm:last-child {
+        margin-bottom: 0;
+    }
+}
+</style>
+
+<script>
+// Funcionalidade de busca
+document.getElementById('searchInput').addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    const productCards = document.querySelectorAll('.product-card');
+    
+    productCards.forEach(card => {
+        const productName = card.dataset.name;
+        if (productName.includes(searchTerm)) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+});
+
+// Funcionalidade de filtros
+document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        // Remove active class de todos os botões
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        // Adiciona active class ao botão clicado
+        this.classList.add('active');
+        
+        const filter = this.dataset.filter;
+        const productCards = document.querySelectorAll('.product-card');
+        
+        productCards.forEach(card => {
+            const status = card.dataset.status;
+            if (filter === 'all' || status === filter) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

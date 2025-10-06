@@ -1,0 +1,378 @@
+{% extends "base.html" %}
+
+{% block title %}Meus Produtos - TechHouse Eletrônicos{% endblock %}
+
+{% block content %}
+<div class="products-management-container">
+    <div class="products-management-header">
+        <h1><i class="fas fa-boxes"></i> Meus Produtos</h1>
+        <p>Gerencie seus produtos cadastrados</p>
+        <a href="{% url 'cadastrar_produto' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Cadastrar Novo Produto
+        </a>
+    </div>
+
+    {% if produtos %}
+        <div class="products-grid">
+            {% for produto in produtos %}
+            <div class="product-card">
+                <div class="product-image">
+                    {% if produto.imagem %}
+                        <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}" class="product-img">
+                    {% else %}
+                        <div class="placeholder-image">
+                            <i class="fas fa-image"></i>
+                            <span>Sem Imagem</span>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="product-info">
+                    <h3 class="product-name">{{ produto.nome }}</h3>
+                    <p class="product-description">{{ produto.descricao|truncatechars:100 }}</p>
+                    
+                    <div class="product-details">
+                        <div class="product-price">
+                            <span class="price-label">Preço:</span>
+                            <span class="price-value">R$ {{ produto.preco|floatformat:2 }}</span>
+                        </div>
+                        <div class="product-stock">
+                            <span class="stock-label">Estoque:</span>
+                            <span class="stock-value">{{ produto.quantidade }} unidades</span>
+                        </div>
+                        <div class="product-status">
+                            {% if produto.disponivel %}
+                                <span class="status-badge available">
+                                    <i class="fas fa-check-circle"></i> Disponível
+                                </span>
+                            {% else %}
+                                <span class="status-badge unavailable">
+                                    <i class="fas fa-times-circle"></i> Indisponível
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-actions">
+                    <a href="{% url 'produto_detail' produto.id %}" class="btn btn-outline btn-sm">
+                        <i class="fas fa-eye"></i> Ver Detalhes
+                    </a>
+                    <a href="{% url 'editar_produto' produto.id %}" class="btn btn-warning btn-sm">
+                        <i class="fas fa-edit"></i> Editar
+                    </a>
+                    <a href="{% url 'excluir_produto' produto.id %}" class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash"></i> Excluir
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="no-products">
+            <div class="no-products-icon">
+                <i class="fas fa-box-open"></i>
+            </div>
+            <h2>Nenhum produto cadastrado</h2>
+            <p>Que tal cadastrar seu primeiro produto?</p>
+            <a href="{% url 'cadastrar_produto' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Cadastrar Produto
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+.products-management-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.products-management-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.products-management-header h1 {
+    color: #333;
+    font-size: 2.5rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.products-management-header p {
+    color: #666;
+    font-size: 1.2rem;
+    margin: 0.5rem 0 0 0;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.product-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    animation: fadeIn 0.6s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+}
+
+.product-image {
+    height: 200px;
+    overflow: hidden;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.placeholder-image {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #ccc;
+    font-size: 3rem;
+    text-align: center;
+}
+
+.placeholder-image span {
+    font-size: 1rem;
+    margin-top: 1rem;
+    font-weight: 600;
+}
+
+.product-info {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-name {
+    color: #333;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+}
+
+.product-description {
+    color: #666;
+    font-size: 1rem;
+    line-height: 1.4;
+    margin-bottom: 1rem;
+    flex: 1;
+}
+
+.product-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.product-price, .product-stock {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.price-label, .stock-label {
+    color: #666;
+    font-weight: 500;
+}
+
+.price-value {
+    color: #28a745;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.stock-value {
+    color: #333;
+    font-weight: 600;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    width: fit-content;
+}
+
+.status-badge.available {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-badge.unavailable {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.product-actions {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 0.75rem;
+}
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+    color: white;
+    text-decoration: none;
+}
+
+.btn-outline {
+    background: white;
+    color: #667eea;
+    border: 2px solid #667eea;
+}
+
+.btn-outline:hover {
+    background: #667eea;
+    color: white;
+    text-decoration: none;
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
+    color: #212529;
+    box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
+}
+
+.btn-warning:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 193, 7, 0.4);
+    color: #212529;
+    text-decoration: none;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+}
+
+.btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.4);
+    color: white;
+    text-decoration: none;
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    flex: 1;
+}
+
+.no-products {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.no-products-icon {
+    font-size: 4rem;
+    color: #ddd;
+    margin-bottom: 2rem;
+}
+
+.no-products h2 {
+    color: #333;
+    margin-bottom: 1rem;
+    font-size: 2rem;
+}
+
+.no-products p {
+    color: #666;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .products-management-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .products-management-header h1 {
+        font-size: 2rem;
+    }
+    
+    .products-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .product-actions {
+        flex-direction: column;
+    }
+}
+</style>
+
+{% endblock %}

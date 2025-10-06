@@ -3,191 +3,233 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-<<<<<<< HEAD
-    <title>Minha Loja</title>
-=======
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}TechHouse Eletrônicos{% endblock %}</title>
->>>>>>> a73ac93 (codigo finalizado)
+    
+    <!-- Meta tags para SEO -->
+    <meta name="description" content="TechHouse Eletrônicos - Sua loja online de produtos eletrônicos com qualidade e preços competitivos">
+    <meta name="keywords" content="eletrônicos, tecnologia, loja online, produtos digitais">
+    <meta name="author" content="TechHouse Eletrônicos">
+    
+    <!-- Open Graph para redes sociais -->
+    <meta property="og:title" content="{% block og_title %}TechHouse Eletrônicos{% endblock %}">
+    <meta property="og:description" content="Sua loja online de produtos eletrônicos com qualidade e preços competitivos">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'loja/favicon.ico' %}">
+    
+    <!-- CSS -->
     <link rel="stylesheet" href="{% static 'loja/style.css' %}">
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<<<<<<< HEAD
-=======
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
->>>>>>> a73ac93 (codigo finalizado)
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
-<body class="bg-light">
-
+<body>
+    <!-- Navbar -->
     <nav class="navbar">
         <div class="container">
-<<<<<<< HEAD
-            <a class="navbar-brand" href="{% url 'lista_produtos' %}">Loja</a>
-            <div class="menu">
-                <a href="{% url 'lista_produtos' %}">Produtos</a>
-                <a href="{% url 'produtos_filtrados' %}">Pesquisar</a>
-                <a href="#">Sobre</a>
-                <a href="#">Contato</a>
-                {% if user.is_authenticate %}
-                <a href="{% url 'ver_carrinho' %}" >Carrinho ({{ carrinho|length }})</a>
-
-                <div>
-                    <button>
-                        "olá, {{user.first_name|default:user.username }}"
-                    </button>
-                    <div>
-                        <form action="{% url 'minha conta' %}" method="get">
-                        <button type="submit">Minha conta</button>
-                        </form>
-                        <hr>
-                        <form action="{% url 'logout' %}" method="post">
-                            {% csrf_token %}
-                            <button type="submit">Sair</button>
-                        </form>
-
-                    </div>
-                </div>
-                {% else %}
-                <a href="{% url 'login' %}">Login</a>
-                <a href="{% url 'registrar' %}">registrar</a>
-                {% endif %}
-      
-       
-        </div>
-        </div>
-        </nav>
-        <main>
-            {% if messages %}
-            <div>
-                {% for message in messages %}
-                {% endfor %}
-
-            </div>
-            {% endif %}
-           
-            {% block content %}
-            {% endblock %}   
-    </main>
-
-    <footer class="footer">
-        <p>Loja</p>
-    </footer>
-</nav>
-=======
             <a class="navbar-brand" href="{% url 'lista_produtos' %}">
                 <i class="fas fa-store"></i> TechHouse Eletrônicos
             </a>
-            <div class="menu">
-                <a href="{% url 'lista_produtos' %}">
+            
+            <ul class="navbar-nav">
+                <li><a href="{% url 'lista_produtos' %}">
                     <i class="fas fa-box"></i> Produtos
-                </a>
-                <a href="{% url 'produtos_filtrados' %}">
+                </a></li>
+                <li><a href="{% url 'produtos_filtrados' %}">
                     <i class="fas fa-search"></i> Pesquisar
-                </a>
-                <a href="{% url 'sobre' %}">
+                </a></li>
+                <li><a href="{% url 'sobre' %}">
                     <i class="fas fa-info-circle"></i> Sobre
-                </a>
-                <a href="{% url 'contato' %}">
+                </a></li>
+                <li><a href="{% url 'contato' %}">
                     <i class="fas fa-envelope"></i> Contato
-                </a>
+                </a></li>
+                
                 {% if user.is_authenticated %}
-                <a href="{% url 'ver_carrinho' %}" class="cart-link">
-                    <i class="fas fa-shopping-cart"></i> 
-                    Carrinho 
+                <li><a href="{% url 'cadastrar_produto' %}">
+                    <i class="fas fa-plus"></i> Cadastrar Produto
+                </a></li>
+                <li><a href="{% url 'meus_produtos' %}">
+                    <i class="fas fa-boxes"></i> Meus Produtos
+                </a></li>
+                <li><a href="{% url 'ver_carrinho' %}" class="cart-link">
+                    <i class="fas fa-shopping-cart"></i> Carrinho
                     <span class="cart-count">{{ carrinho|length }}</span>
-                </a>
-
-                <div class="user-menu">
-                    <button class="user-button">
+                </a></li>
+                
+                <li class="user-dropdown">
+                    <button class="user-button" onclick="toggleUserMenu()">
                         <i class="fas fa-user"></i>
                         Olá, {{ user.first_name|default:user.username }}
+                        <i class="fas fa-chevron-down"></i>
                     </button>
-                    <div class="user-dropdown">
+                    <div class="user-menu" id="userMenu">
+                        <a href="{% url 'minha_conta' %}">
+                            <i class="fas fa-user-circle"></i> Minha Conta
+                        </a>
+                        <a href="{% url 'excluir_conta' %}">
+                            <i class="fas fa-trash"></i> Excluir Conta
+                        </a>
                         <a href="{% url 'logout' %}">
                             <i class="fas fa-sign-out-alt"></i> Sair
                         </a>
                     </div>
-                </div>
+                </li>
                 {% else %}
-                <a href="{% url 'login' %}" class="btn-login">
+                <li><a href="{% url 'login' %}">
                     <i class="fas fa-sign-in-alt"></i> Login
-                </a>
-                <a href="{% url 'registrar' %}" class="btn-register">
+                </a></li>
+                <li><a href="{% url 'registrar' %}">
                     <i class="fas fa-user-plus"></i> Registrar
-                </a>
+                </a></li>
                 {% endif %}
-            </div>
+            </ul>
         </div>
     </nav>
 
-    <main class="main-content">
-        {% if messages %}
-        <div class="messages-container">
+    <!-- Messages -->
+    {% if messages %}
+    <div class="messages-container">
+        <div class="container">
             {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">
-                <i class="fas fa-{% if message.tags == 'error' %}exclamation-circle{% elif message.tags == 'success' %}check-circle{% else %}info-circle{% endif %}"></i>
-                {{ message }}
-                <button class="close-btn" onclick="this.parentElement.remove()">
+            <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                <div class="alert-content">
+                    <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% elif message.tags == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
+                    <span>{{ message }}</span>
+                </div>
+                <button type="button" class="alert-close" onclick="this.parentElement.style.display='none'">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             {% endfor %}
         </div>
-        {% endif %}
-       
+    </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main class="main-content">
         {% block content %}
-        {% endblock %}   
+        {% endblock %}
     </main>
 
+    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
                     <h3><i class="fas fa-store"></i> TechHouse Eletrônicos</h3>
-                    <p>Sua loja online de confiança</p>
+                    <p>Sua loja online de confiança para produtos eletrônicos de alta qualidade com preços competitivos e excelente atendimento.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    </div>
                 </div>
+                
                 <div class="footer-section">
-                    <h4>Links Úteis</h4>
+                    <h3>Produtos</h3>
                     <ul>
-                        <li><a href="{% url 'lista_produtos' %}">Produtos</a></li>
-                        <li><a href="{% url 'produtos_filtrados' %}">Pesquisar</a></li>
-                        <li><a href="{% url 'sobre' %}">Sobre</a></li>
-                        <li><a href="{% url 'contato' %}">Contato</a></li>
+                        <li><a href="{% url 'lista_produtos' %}">Todos os Produtos</a></li>
+                        <li><a href="{% url 'produtos_filtrados' %}">Buscar Produtos</a></li>
+                        <li><a href="{% url 'cadastrar_produto' %}">Cadastrar Produto</a></li>
+                        <li><a href="{% url 'meus_produtos' %}">Meus Produtos</a></li>
                     </ul>
                 </div>
+                
                 <div class="footer-section">
-                    <h4>Contato</h4>
-                    <p><i class="fas fa-envelope"></i> contato@techhouse.com.br</p>
-                    <p><i class="fas fa-phone"></i> (47) 99644-9933</p>
+                    <h3>Suporte</h3>
+                    <ul>
+                        <li><a href="{% url 'sobre' %}">Sobre Nós</a></li>
+                        <li><a href="{% url 'contato' %}">Contato</a></li>
+                        <li><a href="#">Central de Ajuda</a></li>
+                        <li><a href="#">Política de Privacidade</a></li>
+                        <li><a href="#">Termos de Uso</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contato</h3>
+                    <div class="contact-info">
+                        <p><i class="fas fa-phone"></i> (11) 99999-9999</p>
+                        <p><i class="fas fa-envelope"></i> contato@techhouse.com</p>
+                        <p><i class="fas fa-map-marker-alt"></i> São Paulo, SP - Brasil</p>
+                    </div>
                 </div>
             </div>
+            
             <div class="footer-bottom">
-                <p>&copy; 2024 TechHouse Eletrônicos. Todos os direitos reservados.</p>
+                <p>&copy; 2025 TechHouse Eletrônicos. Todos os direitos reservados.</p>
+                <p>Desenvolvido com <i class="fas fa-heart" style="color: #ef4444;"></i> usando Django</p>
             </div>
         </div>
     </footer>
 
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // Toggle user menu
-        document.addEventListener('DOMContentLoaded', function() {
+        // Inicializar AOS
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true,
+            offset: 100
+        });
+
+        // Toggle do menu do usuário
+        function toggleUserMenu() {
+            const menu = document.getElementById('userMenu');
+            menu.classList.toggle('show');
+        }
+
+        // Fechar menu ao clicar fora
+        document.addEventListener('click', function(event) {
+            const userMenu = document.getElementById('userMenu');
             const userButton = document.querySelector('.user-button');
-            const userDropdown = document.querySelector('.user-dropdown');
             
-            if (userButton && userDropdown) {
-                userButton.addEventListener('click', function() {
-                    userDropdown.classList.toggle('show');
-                });
-                
-                // Close dropdown when clicking outside
-                document.addEventListener('click', function(event) {
-                    if (!userButton.contains(event.target) && !userDropdown.contains(event.target)) {
-                        userDropdown.classList.remove('show');
-                    }
-                });
+            if (!userButton.contains(event.target) && userMenu.classList.contains('show')) {
+                userMenu.classList.remove('show');
             }
         });
+
+        // Auto-hide messages
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                alert.style.opacity = '0';
+                setTimeout(() => {
+                    alert.style.display = 'none';
+                }, 300);
+            });
+        }, 5000);
+
+        // Smooth scroll para links internos
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
     </script>
->>>>>>> a73ac93 (codigo finalizado)
+    
+    {% block extra_js %}
+    {% endblock %}
 </body>
 </html>
