@@ -1,0 +1,23 @@
+{
+  "name": "styled-web-project",
+  "version": "1.0.0",
+  "description": "A styled web project with a focus on clean design and usability.",
+  "main": "src/scripts/main.js",
+  "scripts": {
+    "start": "live-server src",
+    "build": "echo 'Build process not defined yet.'"
+  },
+  "keywords": [
+    "html",
+    "css",
+    "javascript",
+    "web",
+    "project"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "live-server": "^1.2.1"
+  }
+}

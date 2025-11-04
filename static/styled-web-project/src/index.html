@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Styled Web Project</title>
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/layout.css">
+    <link rel="stylesheet" href="styles/utilities.css">
+    <link rel="stylesheet" href="styles/components/buttons.css">
+    <link rel="stylesheet" href="styles/components/tabs.css">
+    <link rel="stylesheet" href="styles/components/forms.css">
+</head>
+<body>
+    <header>
+        <h1>Bem-vindo ao Styled Web Project</h1>
+    </header>
+    <nav>
+        <ul class="tabs">
+            <li class="tab active">Tab 1</li>
+            <li class="tab">Tab 2</li>
+            <li class="tab">Tab 3</li>
+        </ul>
+    </nav>
+    <main>
+        <section>
+            <h2>Conteúdo Principal</h2>
+            <p>Este é um exemplo de conteúdo para o projeto estilizado.</p>
+            <button class="btn primary">Clique Aqui</button>
+        </section>
+        <section>
+            <h2>Formulário de Contato</h2>
+            <form>
+                <label for="name">Nome:</label>
+                <input type="text" id="name" name="name" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <button type="submit" class="btn secondary">Enviar</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 Styled Web Project. Todos os direitos reservados.</p>
+    </footer>
+    <script src="scripts/main.js"></script>
+</body>
+</html>
