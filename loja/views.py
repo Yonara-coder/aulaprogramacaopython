@@ -35,8 +35,25 @@ def adicionar_ao_carrinho(request, produto_id):
         return redirect(request.META.get('HTTP_REFERER', 'lista_produtos'))
 
     carrinho = Carrinho(request)
-    carrinho.adicionar(produto=produto)
-    messages.success(request, f'"{produto.nome}" foi adicionado com sucesso')
+    
+    # Verificar se é uma atualização de quantidade
+    if request.method == 'POST':
+        quantidade = request.POST.get('quantidade')
+        if quantidade:
+            quantidade = int(quantidade)
+            if quantidade <= 0:
+                carrinho.remover(produto)
+                messages.success(request, f'"{produto.nome}" foi removido do carrinho')
+            else:
+                carrinho.adicionar(produto=produto, quantidade=quantidade, update_quantidade=True)
+                messages.success(request, f'Quantidade de "{produto.nome}" atualizada para {quantidade}')
+        else:
+            carrinho.adicionar(produto=produto)
+            messages.success(request, f'"{produto.nome}" foi adicionado com sucesso')
+    else:
+        carrinho.adicionar(produto=produto)
+        messages.success(request, f'"{produto.nome}" foi adicionado com sucesso')
+    
     return redirect('ver_carrinho')
 
 @login_required

@@ -36,63 +36,101 @@
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar">
+    <nav class="navbar" role="navigation" aria-label="Navegação principal">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'lista_produtos' %}">
-                <i class="fas fa-store"></i> TechHouse Eletrônicos
+            <a class="navbar-brand" href="{% url 'lista_produtos' %}" aria-label="TechHouse Eletrônicos - Página inicial">
+                <i class="fas fa-store" aria-hidden="true"></i> 
+                <span>TechHouse Eletrônicos</span>
             </a>
             
-            <ul class="navbar-nav">
-                <li><a href="{% url 'lista_produtos' %}">
-                    <i class="fas fa-box"></i> Produtos
-                </a></li>
-                <li><a href="{% url 'produtos_filtrados' %}">
-                    <i class="fas fa-search"></i> Pesquisar
-                </a></li>
-                <li><a href="{% url 'sobre' %}">
-                    <i class="fas fa-info-circle"></i> Sobre
-                </a></li>
-                <li><a href="{% url 'contato' %}">
-                    <i class="fas fa-envelope"></i> Contato
-                </a></li>
+            <ul class="navbar-nav" role="menubar">
+                <li role="none">
+                    <a href="{% url 'lista_produtos' %}" role="menuitem" aria-label="Ver produtos">
+                        <i class="fas fa-box" aria-hidden="true"></i> 
+                        <span>Produtos</span>
+                    </a>
+                </li>
+                <li role="none">
+                    <a href="{% url 'produtos_filtrados' %}" role="menuitem" aria-label="Pesquisar produtos">
+                        <i class="fas fa-search" aria-hidden="true"></i> 
+                        <span>Pesquisar</span>
+                    </a>
+                </li>
+                <li role="none">
+                    <a href="{% url 'sobre' %}" role="menuitem" aria-label="Sobre a empresa">
+                        <i class="fas fa-info-circle" aria-hidden="true"></i> 
+                        <span>Sobre</span>
+                    </a>
+                </li>
+                <li role="none">
+                    <a href="{% url 'contato' %}" role="menuitem" aria-label="Entre em contato">
+                        <i class="fas fa-envelope" aria-hidden="true"></i> 
+                        <span>Contato</span>
+                    </a>
+                </li>
                 
                 {% if user.is_authenticated %}
-                <li><a href="{% url 'cadastrar_produto' %}">
-                    <i class="fas fa-plus"></i> Cadastrar Produto
-                </a></li>
-                <li><a href="{% url 'meus_produtos' %}">
-                    <i class="fas fa-boxes"></i> Meus Produtos
-                </a></li>
-                <li><a href="{% url 'ver_carrinho' %}" class="cart-link">
-                    <i class="fas fa-shopping-cart"></i> Carrinho
-                    <span class="cart-count">{{ carrinho|length }}</span>
-                </a></li>
+                <li role="none">
+                    <a href="{% url 'cadastrar_produto' %}" role="menuitem" aria-label="Cadastrar novo produto">
+                        <i class="fas fa-plus" aria-hidden="true"></i> 
+                        <span>Cadastrar Produto</span>
+                    </a>
+                </li>
+                <li role="none">
+                    <a href="{% url 'meus_produtos' %}" role="menuitem" aria-label="Meus produtos cadastrados">
+                        <i class="fas fa-boxes" aria-hidden="true"></i> 
+                        <span>Meus Produtos</span>
+                    </a>
+                </li>
+                <li role="none">
+                    <a href="{% url 'ver_carrinho' %}" class="cart-link" role="menuitem" aria-label="Ver carrinho de compras">
+                        <i class="fas fa-shopping-cart" aria-hidden="true"></i> 
+                        <span>Carrinho</span>
+                        <span class="cart-count" aria-label="Quantidade de itens no carrinho">{{ carrinho|length }}</span>
+                    </a>
+                </li>
                 
-                <li class="user-dropdown">
-                    <button class="user-button" onclick="toggleUserMenu()">
-                        <i class="fas fa-user"></i>
-                        Olá, {{ user.first_name|default:user.username }}
-                        <i class="fas fa-chevron-down"></i>
+                <li class="user-dropdown" role="none">
+                    <button 
+                        class="user-button" 
+                        type="button"
+                        aria-label="Menu do usuário"
+                        aria-expanded="false"
+                        aria-haspopup="true"
+                        onclick="toggleUserMenu()"
+                    >
+                        <i class="fas fa-user" aria-hidden="true"></i>
+                        <span>Olá, {{ user.first_name|default:user.username }}</span>
+                        <i class="fas fa-chevron-down" aria-hidden="true"></i>
                     </button>
-                    <div class="user-menu" id="userMenu">
-                        <a href="{% url 'minha_conta' %}">
-                            <i class="fas fa-user-circle"></i> Minha Conta
+                    <div class="user-menu" id="userMenu" role="menu" aria-label="Menu do usuário">
+                        <a href="{% url 'minha_conta' %}" role="menuitem">
+                            <i class="fas fa-user-circle" aria-hidden="true"></i> 
+                            <span>Minha Conta</span>
                         </a>
-                        <a href="{% url 'excluir_conta' %}">
-                            <i class="fas fa-trash"></i> Excluir Conta
+                        <a href="{% url 'excluir_conta' %}" role="menuitem">
+                            <i class="fas fa-trash" aria-hidden="true"></i> 
+                            <span>Excluir Conta</span>
                         </a>
-                        <a href="{% url 'logout' %}">
-                            <i class="fas fa-sign-out-alt"></i> Sair
+                        <a href="{% url 'logout' %}" role="menuitem">
+                            <i class="fas fa-sign-out-alt" aria-hidden="true"></i> 
+                            <span>Sair</span>
                         </a>
                     </div>
                 </li>
                 {% else %}
-                <li><a href="{% url 'login' %}">
-                    <i class="fas fa-sign-in-alt"></i> Login
-                </a></li>
-                <li><a href="{% url 'registrar' %}">
-                    <i class="fas fa-user-plus"></i> Registrar
-                </a></li>
+                <li role="none">
+                    <a href="{% url 'login' %}" role="menuitem" aria-label="Fazer login">
+                        <i class="fas fa-sign-in-alt" aria-hidden="true"></i> 
+                        <span>Login</span>
+                    </a>
+                </li>
+                <li role="none">
+                    <a href="{% url 'registrar' %}" role="menuitem" aria-label="Criar nova conta">
+                        <i class="fas fa-user-plus" aria-hidden="true"></i> 
+                        <span>Registrar</span>
+                    </a>
+                </li>
                 {% endif %}
             </ul>
         </div>
@@ -100,16 +138,22 @@
 
     <!-- Messages -->
     {% if messages %}
-    <div class="messages-container">
+    <div class="messages-container" role="region" aria-live="polite" aria-atomic="true">
         <div class="container">
             {% for message in messages %}
-            <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+            <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert" aria-live="assertive">
                 <div class="alert-content">
-                    <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% elif message.tags == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
+                    <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% elif message.tags == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %}" aria-hidden="true"></i>
                     <span>{{ message }}</span>
                 </div>
-                <button type="button" class="alert-close" onclick="this.parentElement.style.display='none'">
-                    <i class="fas fa-times"></i>
+                <button 
+                    type="button" 
+                    class="alert-close" 
+                    aria-label="Fechar mensagem"
+                    onclick="this.parentElement.style.display='none'"
+                >
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                    <span class="sr-only">Fechar</span>
                 </button>
             </div>
             {% endfor %}
@@ -124,54 +168,82 @@
     </main>
 
     <!-- Footer -->
-    <footer class="footer">
+    <footer class="footer" role="contentinfo">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3><i class="fas fa-store"></i> TechHouse Eletrônicos</h3>
+                    <h3>
+                        <i class="fas fa-store" aria-hidden="true"></i> 
+                        <span>TechHouse Eletrônicos</span>
+                    </h3>
                     <p>Sua loja online de confiança para produtos eletrônicos de alta qualidade com preços competitivos e excelente atendimento.</p>
-                    <div class="social-links">
-                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                    </div>
+                    <nav class="social-links" aria-label="Redes sociais">
+                        <a href="#" aria-label="Facebook - Abrir em nova aba" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-facebook" aria-hidden="true"></i>
+                            <span class="sr-only">Facebook</span>
+                        </a>
+                        <a href="#" aria-label="Instagram - Abrir em nova aba" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-instagram" aria-hidden="true"></i>
+                            <span class="sr-only">Instagram</span>
+                        </a>
+                        <a href="#" aria-label="Twitter - Abrir em nova aba" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-twitter" aria-hidden="true"></i>
+                            <span class="sr-only">Twitter</span>
+                        </a>
+                        <a href="#" aria-label="LinkedIn - Abrir em nova aba" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-linkedin" aria-hidden="true"></i>
+                            <span class="sr-only">LinkedIn</span>
+                        </a>
+                    </nav>
                 </div>
                 
                 <div class="footer-section">
                     <h3>Produtos</h3>
-                    <ul>
-                        <li><a href="{% url 'lista_produtos' %}">Todos os Produtos</a></li>
-                        <li><a href="{% url 'produtos_filtrados' %}">Buscar Produtos</a></li>
-                        <li><a href="{% url 'cadastrar_produto' %}">Cadastrar Produto</a></li>
-                        <li><a href="{% url 'meus_produtos' %}">Meus Produtos</a></li>
-                    </ul>
+                    <nav aria-label="Navegação de produtos">
+                        <ul>
+                            <li><a href="{% url 'lista_produtos' %}">Todos os Produtos</a></li>
+                            <li><a href="{% url 'produtos_filtrados' %}">Buscar Produtos</a></li>
+                            <li><a href="{% url 'cadastrar_produto' %}">Cadastrar Produto</a></li>
+                            <li><a href="{% url 'meus_produtos' %}">Meus Produtos</a></li>
+                        </ul>
+                    </nav>
                 </div>
                 
                 <div class="footer-section">
                     <h3>Suporte</h3>
-                    <ul>
-                        <li><a href="{% url 'sobre' %}">Sobre Nós</a></li>
-                        <li><a href="{% url 'contato' %}">Contato</a></li>
-                        <li><a href="#">Central de Ajuda</a></li>
-                        <li><a href="#">Política de Privacidade</a></li>
-                        <li><a href="#">Termos de Uso</a></li>
-                    </ul>
+                    <nav aria-label="Navegação de suporte">
+                        <ul>
+                            <li><a href="{% url 'sobre' %}">Sobre Nós</a></li>
+                            <li><a href="{% url 'contato' %}">Contato</a></li>
+                            <li><a href="#">Central de Ajuda</a></li>
+                            <li><a href="#">Política de Privacidade</a></li>
+                            <li><a href="#">Termos de Uso</a></li>
+                        </ul>
+                    </nav>
                 </div>
                 
                 <div class="footer-section">
                     <h3>Contato</h3>
-                    <div class="contact-info">
-                        <p><i class="fas fa-phone"></i> (11) 99999-9999</p>
-                        <p><i class="fas fa-envelope"></i> contato@techhouse.com</p>
-                        <p><i class="fas fa-map-marker-alt"></i> São Paulo, SP - Brasil</p>
-                    </div>
+                    <address class="contact-info">
+                        <p>
+                            <i class="fas fa-phone" aria-hidden="true"></i>
+                            <a href="tel:+5511999999999">(11) 99999-9999</a>
+                        </p>
+                        <p>
+                            <i class="fas fa-envelope" aria-hidden="true"></i>
+                            <a href="mailto:contato@techhouse.com">contato@techhouse.com</a>
+                        </p>
+                        <p>
+                            <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+                            São Paulo, SP - Brasil
+                        </p>
+                    </address>
                 </div>
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; 2025 TechHouse Eletrônicos. Todos os direitos reservados.</p>
-                <p>Desenvolvido com <i class="fas fa-heart" style="color: #ef4444;"></i> usando Django</p>
+                <p>&copy; <time datetime="2025">2025</time> TechHouse Eletrônicos. Todos os direitos reservados.</p>
+                <p>Desenvolvido com <i class="fas fa-heart" aria-hidden="true" style="color: #ef4444;"></i> usando Django</p>
             </div>
         </div>
     </footer>
@@ -187,19 +259,40 @@
             offset: 100
         });
 
-        // Toggle do menu do usuário
+        // Toggle do menu do usuário com acessibilidade
         function toggleUserMenu() {
             const menu = document.getElementById('userMenu');
+            const button = document.querySelector('.user-button');
+            const isExpanded = menu.classList.contains('show');
+            
             menu.classList.toggle('show');
+            button.setAttribute('aria-expanded', !isExpanded);
         }
 
-        // Fechar menu ao clicar fora
+        // Fechar menu ao clicar fora ou pressionar ESC
         document.addEventListener('click', function(event) {
             const userMenu = document.getElementById('userMenu');
             const userButton = document.querySelector('.user-button');
             
-            if (!userButton.contains(event.target) && userMenu.classList.contains('show')) {
+            if (userButton && userMenu && !userButton.contains(event.target) && !userMenu.contains(event.target) && userMenu.classList.contains('show')) {
                 userMenu.classList.remove('show');
+                userButton.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        // Fechar menu ao pressionar ESC
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const userMenu = document.getElementById('userMenu');
+                const userButton = document.querySelector('.user-button');
+                
+                if (userMenu && userMenu.classList.contains('show')) {
+                    userMenu.classList.remove('show');
+                    if (userButton) {
+                        userButton.setAttribute('aria-expanded', 'false');
+                        userButton.focus();
+                    }
+                }
             }
         });
 

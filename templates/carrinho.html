@@ -45,12 +45,13 @@
                             <div class="quantity-controls">
                                 <form method="post" action="{% url 'adicionar_ao_carrinho' produto.id %}" class="quantity-form">
                                     {% csrf_token %}
-                                    <input type="hidden" name="update_quantidade" value="true">
-                                    <button type="submit" name="quantidade" value="{{ item.quantidade|add:'-1' }}" class="qty-btn minus">
+                                    <button type="submit" name="quantidade" value="{{ item.quantidade|add:'-1' }}" class="qty-btn minus" 
+                                            onclick="return confirm('Diminuir quantidade?')">
                                         <i class="fas fa-minus"></i>
                                     </button>
                                     <span class="quantity">{{ item.quantidade }}</span>
-                                    <button type="submit" name="quantidade" value="{{ item.quantidade|add:'1' }}" class="qty-btn plus">
+                                    <button type="submit" name="quantidade" value="{{ item.quantidade|add:'1' }}" class="qty-btn plus"
+                                            onclick="return confirm('Aumentar quantidade?')">
                                         <i class="fas fa-plus"></i>
                                     </button>
                                 </form>
